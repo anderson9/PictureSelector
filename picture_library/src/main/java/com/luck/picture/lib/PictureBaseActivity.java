@@ -50,7 +50,7 @@ import io.reactivex.schedulers.Schedulers;
 public class PictureBaseActivity extends FragmentActivity {
     protected Context mContext;
     protected PictureSelectionConfig config;
-    protected boolean openWhiteStatusBar, numComplete;
+    protected boolean openWhiteStatusBar, numComplete = true;
     protected int colorPrimary, colorPrimaryDark;
     protected String cameraPath, outputCameraPath;
     protected String originalPath;

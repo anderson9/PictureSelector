@@ -1,5 +1,5 @@
 <resources>
-    <string name="picture_camera_roll">相机胶卷</string>
+    <string name="picture_camera_roll">图片和视频</string>
     <string name="picture_cancel">取消</string>
     <string name="picture_take_picture">拍摄</string>
     <string name="picture_rule">不能同时选择图片或视频</string>
@@ -8,7 +8,7 @@
     <string name="picture_message_video_max_num">你最多可以选择%1$s个视频</string>
     <string name="picture_preview">预览</string>
     <string name="picture_please">请稍候...</string>
-    <string name="picture_done_front_num">%1$d/%2$d 完成</string>
+    <string name="picture_done_front_num">完成(%1$d/%2$d)</string>
     <string name="picture_completed">已完成</string>
     <string name="picture_done">完成</string>
     <string name="picture_please_select">请选择</string>
