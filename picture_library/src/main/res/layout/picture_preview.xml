@@ -32,41 +32,6 @@
             android:textSize="18sp" />
 
         <LinearLayout
-            android:id="@+id/ll_check"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
-
-            <TextView
-                android:id="@+id/check"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/picture.checked.style"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-        </LinearLayout>
-    </RelativeLayout>
-
-
-    <com.luck.picture.lib.widget.PreviewViewPager
-        android:id="@+id/preview_pager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <RelativeLayout
-        android:id="@+id/select_bar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="?attr/picture.ac_preview.bottom.bg"
-        android:gravity="center_vertical">
-
-        <LinearLayout
             android:id="@+id/id_ll_ok"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -99,5 +64,54 @@
                 android:textSize="14sp" />
 
         </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <com.luck.picture.lib.widget.PreviewViewPager
+        android:id="@+id/preview_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <RelativeLayout
+        android:id="@+id/select_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="?attr/picture.ac_preview.bottom.bg"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:id="@+id/ll_check"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:id="@+id/check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/picture.checked.style"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:ellipsize="end"
+                android:maxEms="11"
+                android:paddingLeft="10dp"
+                android:text="选择"
+                android:textColor="?attr/picture.ac_preview.title.textColor"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+
     </RelativeLayout>
 </LinearLayout>
