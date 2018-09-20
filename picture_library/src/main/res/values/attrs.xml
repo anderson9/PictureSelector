@@ -24,8 +24,10 @@
     <attr name="picture.bottom.bg" format="reference|color" />
     <attr name="picture.preview.textColor" format="reference|color" />
     <attr name="picture.complete.textColor" format="reference|color" />
+    <attr name="picture.complete.bg" format="reference|color" />
     <attr name="picture.ac_preview.title.textColor" format="reference|color" />
     <attr name="picture.ac_preview.complete.textColor" format="reference|color" />
+    <attr name="picture.ac_preview.complete.bg" format="reference|color" />
     <attr name="picture.ac_preview.bottom.bg" format="reference|color" />
     <attr name="picture.status.color" format="reference|color" />
     <attr name="picture.ac_preview.title.bg" format="reference|color" />
