@@ -58,7 +58,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     public static final int TYPE_DEFAULT = 0x004;
 
     //录制视频比特率
-    public static final int MEDIA_QUALITY_HIGH = (int) (2.56 * 1024 * 1024);//自定义的 符合益村 编解码的设置
+    public static final int MEDIA_QUALITY_HIGH = (int) (6 * 1024 * 1024);//自定义的  大概1080的码率设置 具体由手机性能决定
     public static final int MEDIA_QUALITY_MIDDLE = 16 * 100000;
     public static final int MEDIA_QUALITY_LOW = 12 * 100000;
     public static final int MEDIA_QUALITY_POOR = 8 * 100000;
@@ -185,7 +185,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
         mCaptureLayout.setReturnLisenter(new ReturnListener() {
             @Override
             public void onReturn() {
-                if(reTurnClickListener!=null){
+                if (reTurnClickListener != null) {
                     reTurnClickListener.onClick();
                 }
             }
@@ -264,7 +264,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
         mCaptureLayout.setRightClickListener(new ClickListener() {
             @Override
             public void onClick() {
-                if(rightClickListener!=null){
+                if (rightClickListener != null) {
                     rightClickListener.onClick();
                 }
             }

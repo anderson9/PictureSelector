@@ -507,11 +507,8 @@ public class CameraInterface implements Camera.PreviewCallback {
         }
 
 
-        if (DeviceUtil.isHuaWeiRongyao()) {
-            mediaRecorder.setVideoEncodingBitRate(4 * 100000);
-        } else {
             mediaRecorder.setVideoEncodingBitRate(mediaQuality);
-        }
+        mediaRecorder.setVideoFrameRate(20);
         mediaRecorder.setPreviewDisplay(surface);
 
         videoFileName = "video_" + System.currentTimeMillis() + ".mp4";
