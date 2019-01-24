@@ -42,7 +42,8 @@ public final class PictureConfig {
     public final static int MULTIPLE = 2;
 
     public final static int CHOOSE_REQUEST = 188;
-    public final static int REQUEST_CAMERA = 909;
+    public final static int REQUEST_CAMERA = 909;//系统相机
+    public final static int REQUEST_CUSTOM_CAMERA = 910;//自定义录制视频
     public final static int READ_EXTERNAL_STORAGE = 0x01;
     public final static int CAMERA = 0x02;
 }

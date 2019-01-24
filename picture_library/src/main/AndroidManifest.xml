@@ -15,8 +15,14 @@
         </provider>
         <activity
             android:name=".PictureSelectorActivity"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".PicturePreviewActivity" />
+        <activity
+            android:name="com.luck.picture.lib.camare.TakeCamareActivity"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".PictureVideoPlayActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

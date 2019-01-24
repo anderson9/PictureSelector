@@ -14,6 +14,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -25,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.luck.picture.lib.camare.TakeCamareActivity;
 import com.luck.picture.lib.adapter.PictureAlbumDirectoryAdapter;
 import com.luck.picture.lib.adapter.PictureImageGridAdapter;
 import com.luck.picture.lib.config.PictureConfig;
@@ -365,7 +367,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     }
 
     /**
-     * start to camera、preview、crop
+     * 图片拍摄
      */
     public void startOpenCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -382,22 +384,22 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     }
 
     /**
-     * start to camera、video
+     * 视频拍摄
      */
     public void startOpenCameraVideo() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
-            File cameraFile = PictureFileUtils.createCameraFile(this, config.mimeType ==
-                            PictureConfig.TYPE_ALL ? PictureConfig.TYPE_VIDEO : config.mimeType,
-                    outputCameraPath, config.suffixType);
-            cameraPath = cameraFile.getAbsolutePath();
-            Uri imageUri = parUri(cameraFile);
-            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            cameraIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, config.recordVideoSecond);
-            cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, config.videoQuality);
-            startActivityForResult(cameraIntent, PictureConfig.REQUEST_CAMERA);
+        File cameraFile = PictureFileUtils.createCameraFile(this, config.mimeType ==
+                        PictureConfig.TYPE_ALL ? PictureConfig.TYPE_VIDEO : config.mimeType,
+                outputCameraPath, config.suffixType);
+        cameraPath = cameraFile.getParent();
+        TakeCamareActivity.toTakeCamareActivity(this,PictureConfig.REQUEST_CUSTOM_CAMERA,cameraPath);
+//        Intent cameraIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+//        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+//            Uri imageUri = parUri(cameraFile);
+//            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+//            cameraIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, config.recordVideoSecond);
+//            cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, config.videoQuality);
+//            startActivityForResult(cameraIntent, PictureConfig.REQUEST_CAMERA);
         }
-    }
 
     /**
      * start to camera audio
@@ -929,6 +931,103 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                         medias.add(media);
                     }
                     handlerResult(medias);
+                    break;
+                case  PictureConfig.REQUEST_CUSTOM_CAMERA:
+                    String url = data.getStringExtra("url");
+                    if(!TextUtils.isEmpty(url)){
+                        cameraPath=url;
+                    }
+                    final File file1 = new File(cameraPath);
+                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file1)));
+                    String toType1 = PictureMimeType.fileToType(file1);
+                    if (config.mimeType != PictureMimeType.ofAudio()) {
+                        int degree = PictureFileUtils.readPictureDegree(file1.getAbsolutePath());
+                        rotateImage(degree, file1);
+                    }
+                    // 生成新拍照片或视频对象
+                    media = new LocalMedia();
+                    media.setPath(cameraPath);
+                    if (config.mimeType != PictureMimeType.ofAudio()) {
+                        int degree = PictureFileUtils.readPictureDegree(file1.getAbsolutePath());
+                        rotateImage(degree, file1);
+                    }
+                    // 生成新拍照片或视频对象
+                    media = new LocalMedia();
+                    media.setPath(cameraPath);
+
+                    boolean eqVideo1 = toType1.startsWith(PictureConfig.VIDEO);
+                    int duration1 = eqVideo1 ? PictureMimeType.getLocalVideoDuration(cameraPath) : 0;
+                    String pictureType1 = "";
+                    if (config.mimeType == PictureMimeType.ofAudio()) {
+                        pictureType1 = "audio/mpeg";
+                        duration1 = PictureMimeType.getLocalVideoDuration(cameraPath);
+                    } else {
+                        pictureType1 = eqVideo1 ? PictureMimeType.createVideoType(cameraPath)
+                                : PictureMimeType.createImageType(cameraPath);
+                    }
+                    media.setPictureType(pictureType1);
+                    media.setDuration(duration1);
+                    media.setMimeType(config.mimeType);
+
+                    // 因为加入了单独拍照功能，所有如果是单独拍照的话也默认为单选状态
+                    if (config.camera) {
+                        // 如果是单选 拍照后直接返回
+                        boolean eqImg = toType1.startsWith(PictureConfig.IMAGE);
+                        if (config.enableCrop && eqImg) {
+                            // 去裁剪
+                            originalPath = cameraPath;
+                            startCrop(cameraPath);
+                        } else if (config.isCompress && eqImg) {
+                            // 去压缩
+                            medias.add(media);
+                            compressImage(medias);
+                            if (adapter != null) {
+                                images.add(0, media);
+                                adapter.notifyDataSetChanged();
+                            }
+                        } else {
+                            // 不裁剪 不压缩 直接返回结果
+                            medias.add(media);
+                            onResult(medias);
+                        }
+                    } else {
+                        // 多选 返回列表并选中当前拍照的
+                        images.add(0, media);
+                        if (adapter != null) {
+                            List<LocalMedia> selectedImages = adapter.getSelectedImages();
+                            // 没有到最大选择量 才做默认选中刚拍好的
+                            if (selectedImages.size() < config.maxSelectNum) {
+                                pictureType1 = selectedImages.size() > 0 ? selectedImages.get(0).getPictureType() : "";
+                                boolean toEqual = PictureMimeType.mimeToEqual(pictureType1, media.getPictureType());
+                                // 类型相同或还没有选中才加进选中集合中
+                                if (toEqual || selectedImages.size() == 0) {
+                                    if (selectedImages.size() < config.maxSelectNum) {
+                                        // 如果是单选，则清空已选中的并刷新列表(作单一选择)
+                                        if (config.selectionMode == PictureConfig.SINGLE) {
+                                            singleRadioMediaImage();
+                                        }
+                                        selectedImages.add(media);
+                                        adapter.bindSelectImages(selectedImages);
+                                    }
+                                }
+                            }
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                    if (adapter != null) {
+                        // 解决部分手机拍照完Intent.ACTION_MEDIA_SCANNER_SCAN_FILE
+                        // 不及时刷新问题手动添加
+                        manualSaveFolder(media);
+                        tv_empty.setVisibility(images.size() > 0
+                                ? View.INVISIBLE : View.VISIBLE);
+                    }
+
+                    if (config.mimeType != PictureMimeType.ofAudio()) {
+                        int lastImageId = getLastImageId(eqVideo1);
+                        if (lastImageId != -1) {
+                            removeImage(lastImageId, eqVideo1);
+                        }
+                    }
                     break;
                 case PictureConfig.REQUEST_CAMERA:
                     if (config.mimeType == PictureMimeType.ofAudio()) {
