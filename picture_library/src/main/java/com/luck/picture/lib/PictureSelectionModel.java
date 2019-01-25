@@ -1,20 +1,23 @@
 package com.luck.picture.lib;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
 
-import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureSelectionConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.tools.DoubleUtils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.ACTIVITY_SERVICE;
 
 /**
  * author：luck
@@ -262,7 +265,6 @@ public class PictureSelectionModel {
     }
 
     /**
-     * @param Less than how many KB images are not compressed
      * @return
      */
     public PictureSelectionModel minimumCompressSize(int size) {
@@ -420,6 +422,22 @@ public class PictureSelectionModel {
         }
     }
 
+    public void toSelect( ) {
+        if (!DoubleUtils.isFastDoubleClick()) {
+            Activity activity = selector.getActivity();
+            if (activity == null) {
+                return;
+            }
+            Intent intent = new Intent(activity, PictureSelectorActivity.class);
+            Fragment fragment = selector.getFragment();
+            if (fragment != null) {
+                fragment.startActivity(intent);
+            } else {
+                activity.startActivity(intent);
+            }
+            activity.overridePendingTransition(R.anim.a5, 0);
+        }
+    }
     /**
      * 提供外部预览图片方法
      *

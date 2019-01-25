@@ -17,9 +17,11 @@
             android:name=".PictureSelectorActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan" />
+
         <activity android:name=".PicturePreviewActivity" />
+
         <activity
-            android:name="com.luck.picture.lib.camare.TakeCamareActivity"
+            android:name=".camare.TakeCamareActivity"
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />

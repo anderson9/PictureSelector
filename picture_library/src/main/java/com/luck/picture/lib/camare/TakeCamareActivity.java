@@ -30,6 +30,7 @@ import com.luck.picture.lib.config.PictureMimeType;
  * -------------------------------------------
  **/
 public class TakeCamareActivity extends AppCompatActivity {
+
     public static void toTakeCamareActivity(Activity mActivity, int requeCode, String cameraPath) {
         Intent intent = new Intent();
         intent.setClass(mActivity, TakeCamareActivity.class);
@@ -37,6 +38,7 @@ public class TakeCamareActivity extends AppCompatActivity {
         intent.putExtra("requeCode", requeCode);
         mActivity.startActivityForResult(intent, requeCode);
     }
+
 
     String cameraPath;
     int requeCode;
@@ -109,7 +111,7 @@ public class TakeCamareActivity extends AppCompatActivity {
                             .videoQuality(1)// 视频录制质量 0 or 1 int
                             .videoMaxSecond(180)// 显示多少秒以内的视频or音频也可适用 int
                             .recordVideoSecond(20)//视频秒数录制 默认60s int
-                            .forResult(requeCode);//结果回调onActivityResult code
+                            .toSelect();//结果回调onActivityResult code
                 }
                 finish();
             }

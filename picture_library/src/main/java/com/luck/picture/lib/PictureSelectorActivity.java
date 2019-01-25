@@ -392,6 +392,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 outputCameraPath, config.suffixType);
         cameraPath = cameraFile.getParent();
         TakeCamareActivity.toTakeCamareActivity(this,PictureConfig.REQUEST_CUSTOM_CAMERA,cameraPath);
+
 //        Intent cameraIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
 //        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
 //            Uri imageUri = parUri(cameraFile);
